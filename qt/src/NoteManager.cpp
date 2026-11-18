@@ -14,6 +14,19 @@ NoteManager::NoteManager(QObject* parent)
 
 void NoteManager::createNote()
 {
+    const QPoint cursorPosition = QCursor::pos();
+    const int offset = (m_noteCounter % 6) * 24;
+
+    createNoteAt(
+        QPoint(
+            cursorPosition.x() + 20 + offset,
+            cursorPosition.y() + 20 + offset
+        )
+    );
+}
+
+StickyNote* NoteManager::createNoteAt(const QPoint& position)
+{
     removeDeletedNotes();
 
     auto* note = new StickyNote();
@@ -25,19 +38,16 @@ void NoteManager::createNote()
         palette.second
     );
 
-    const QPoint cursorPosition = QCursor::pos();
-    const int offset = (m_noteCounter % 6) * 24;
-
-    note->move(
-        cursorPosition.x() + 20 + offset,
-        cursorPosition.y() + 20 + offset
-    );
+    note->move(position);
 
     m_notes.append(note);
 
     note->show();
+    note->raise();
 
     ++m_noteCounter;
+
+    return note;
 }
 
 void NoteManager::saveNotes()

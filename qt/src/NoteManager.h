@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QPair>
+#include <QPoint>
 
 class StickyNote;
 
@@ -14,6 +15,7 @@ public:
     explicit NoteManager(QObject* parent = nullptr);
 
     void createNote();
+    StickyNote* createNoteAt(const QPoint& position);
     void loadNotes();
     void saveNotes();
 

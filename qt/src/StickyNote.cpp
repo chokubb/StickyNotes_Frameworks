@@ -3,6 +3,7 @@
 #include <QMouseEvent>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 StickyNote::StickyNote(QWidget* parent)
     : QWidget(parent)
@@ -21,6 +22,28 @@ StickyNote::StickyNote(QWidget* parent)
         "    background-color: #FFF2A8;"
         "}"
     );
+
+    auto* closeButton = new QPushButton("×", this);
+
+    closeButton->setGeometry(width() - 34, 6, 28, 28);
+
+    closeButton->setStyleSheet(
+        "QPushButton {"
+        "    background: transparent;"
+        "    border: none;"
+        "    font-size: 20px;"
+        "    color: #5A5130;"
+        "}"
+        "QPushButton:hover {"
+        "    background-color: rgba(0, 0, 0, 25);"
+        "    border-radius: 4px;"
+        "}"
+    );
+
+    connect(closeButton, &QPushButton::clicked,
+        this, &QWidget::close);
+
+    setAttribute(Qt::WA_DeleteOnClose);
 
     auto* layout = new QVBoxLayout(this);
 

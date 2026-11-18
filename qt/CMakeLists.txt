@@ -4,8 +4,15 @@ qt_standard_project_setup()
 
 qt_add_executable(StickyNotesQt
     src/main.cpp
+
     src/StickyNote.cpp
     src/StickyNote.h
+
+    src/NoteManager.cpp
+    src/NoteManager.h
+
+    src/LauncherWindow.cpp
+    src/LauncherWindow.h
 )
 
 target_link_libraries(StickyNotesQt

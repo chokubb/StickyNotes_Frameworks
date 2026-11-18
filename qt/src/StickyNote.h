@@ -7,6 +7,9 @@
 
 class QMouseEvent;
 class QPlainTextEdit;
+class QPushButton;
+class QResizeEvent;
+class QSizeGrip;
 
 class StickyNote : public QWidget
 {
@@ -28,11 +31,15 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
 
 private:
     void applyColors();
+    void updateControlPositions();
 
     QPlainTextEdit* m_editor;
+    QPushButton* m_closeButton;
+    QSizeGrip* m_sizeGrip;
 
     QColor m_backgroundColor = QColor("#FFF2A8");
     QColor m_textColor = QColor("#2B2B2B");

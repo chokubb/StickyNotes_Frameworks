@@ -107,6 +107,12 @@ void NoteManager::loadNotes()
         const int y =
             settings.value("y", 100).toInt();
 
+        const int width =
+            settings.value("width", 320).toInt();
+
+        const int height =
+            settings.value("height", 320).toInt();
+
         const QColor backgroundColor(
             settings.value(
                 "backgroundColor",
@@ -128,6 +134,7 @@ void NoteManager::loadNotes()
             textColor
         );
 
+        note->resize(width, height);
         note->move(x, y);
 
         m_notes.append(note);

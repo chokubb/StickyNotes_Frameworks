@@ -2,13 +2,16 @@
 
 #include <QMouseEvent>
 #include <QPlainTextEdit>
-#include <QVBoxLayout>
 #include <QPushButton>
+#include <QResizeEvent>
+#include <QSizeGrip>
+#include <QVBoxLayout>
 
 StickyNote::StickyNote(QWidget* parent)
     : QWidget(parent)
 {
-    setFixedSize(320, 320);
+    setMinimumSize(220, 180);
+    resize(320, 320);
 
     setWindowFlags(
         Qt::Window |
@@ -17,86 +20,40 @@ StickyNote::StickyNote(QWidget* parent)
 
     setObjectName("stickyNote");
 
-    auto* closeButton = new QPushButton("×", this);
+    m_closeButton = new QPushButton("×", this);
+    m_closeButton->setFixedSize(28, 28);
 
-    closeButton->setGeometry(width() - 34, 6, 28, 28);
-
-    closeButton->setStyleSheet(
-        "QPushButton {"
-        "    background: transparent;"
-        "    border: none;"
-        "    font-size: 20px;"
-        "    color: #5A5130;"
-        "}"
-        "QPushButton:hover {"
-        "    background-color: rgba(0, 0, 0, 25);"
-        "    border-radius: 4px;"
-        "}"
+    connect(
+        m_closeButton,
+        &QPushButton::clicked,
+        this,
+        &QWidget::close
     );
-
-    connect(closeButton, &QPushButton::clicked,
-        this, &QWidget::close);
 
     setAttribute(Qt::WA_DeleteOnClose);
 
     auto* layout = new QVBoxLayout(this);
 
-    // Leave a small empty area at the top for dragging the note.
-    layout->setContentsMargins(12, 34, 12, 12);
+    // Top area is used for dragging.
+    // Extra space at the bottom/right leaves room for the resize grip.
+    layout->setContentsMargins(12, 34, 20, 20);
 
     m_editor = new QPlainTextEdit(this);
 
     m_editor->setPlaceholderText("Write something...");
     m_editor->setFrameShape(QFrame::NoFrame);
 
-    applyColors();
-
     layout->addWidget(m_editor);
-}
 
-void StickyNote::mousePressEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton &&
-        event->position().y() <= 34)
-    {
-        m_dragging = true;
+    m_sizeGrip = new QSizeGrip(this);
+    m_sizeGrip->setFixedSize(20, 20);
+    m_sizeGrip->setToolTip("Resize note");
 
-        m_dragOffset =
-            event->globalPosition().toPoint()
-            - frameGeometry().topLeft();
+    applyColors();
+    updateControlPositions();
 
-        event->accept();
-        return;
-    }
-
-    QWidget::mousePressEvent(event);
-}
-
-void StickyNote::mouseMoveEvent(QMouseEvent* event)
-{
-    if (m_dragging &&
-        (event->buttons() & Qt::LeftButton))
-    {
-        move(
-            event->globalPosition().toPoint()
-            - m_dragOffset
-        );
-
-        event->accept();
-        return;
-    }
-
-    QWidget::mouseMoveEvent(event);
-}
-
-void StickyNote::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        m_dragging = false;
-    }
-
-    QWidget::mouseReleaseEvent(event);
+    m_closeButton->raise();
+    m_sizeGrip->raise();
 }
 
 QString StickyNote::text() const
@@ -153,4 +110,93 @@ void StickyNote::applyColors()
             ).arg(m_textColor.name())
         );
     }
+
+    if (m_closeButton)
+    {
+        m_closeButton->setStyleSheet(
+            QString(
+                "QPushButton {"
+                "    background: transparent;"
+                "    border: none;"
+                "    font-size: 20px;"
+                "    color: %1;"
+                "}"
+                "QPushButton:hover {"
+                "    background-color: rgba(0, 0, 0, 25);"
+                "    border-radius: 4px;"
+                "}"
+            ).arg(m_textColor.name())
+        );
+    }
+}
+
+void StickyNote::updateControlPositions()
+{
+    if (m_closeButton)
+    {
+        m_closeButton->move(
+            width() - m_closeButton->width() - 6,
+            6
+        );
+    }
+
+    if (m_sizeGrip)
+    {
+        m_sizeGrip->move(
+            width() - m_sizeGrip->width() - 3,
+            height() - m_sizeGrip->height() - 3
+        );
+    }
+}
+
+void StickyNote::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton &&
+        event->position().y() <= 34)
+    {
+        m_dragging = true;
+
+        m_dragOffset =
+            event->globalPosition().toPoint()
+            - frameGeometry().topLeft();
+
+        event->accept();
+        return;
+    }
+
+    QWidget::mousePressEvent(event);
+}
+
+void StickyNote::mouseMoveEvent(QMouseEvent* event)
+{
+    if (m_dragging &&
+        (event->buttons() & Qt::LeftButton))
+    {
+        move(
+            event->globalPosition().toPoint()
+            - m_dragOffset
+        );
+
+        event->accept();
+        return;
+    }
+
+    QWidget::mouseMoveEvent(event);
+}
+
+void StickyNote::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        m_dragging = false;
+    }
+
+    QWidget::mouseReleaseEvent(event);
+}
+
+void StickyNote::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+
+    updateControlPositions();
 }

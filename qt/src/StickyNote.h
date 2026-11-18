@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QPoint>
+#include <QString>
 #include <QWidget>
 
 class QMouseEvent;
@@ -10,6 +11,9 @@ class StickyNote : public QWidget
 {
 public:
     explicit StickyNote(QWidget* parent = nullptr);
+
+    QString text() const;
+    void setText(const QString& text);
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;

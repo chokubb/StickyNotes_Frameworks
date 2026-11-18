@@ -2,6 +2,7 @@
 
 #include <QWidget>
 
+class QCloseEvent;
 class NoteManager;
 
 class LauncherWindow : public QWidget
@@ -11,6 +12,9 @@ public:
         NoteManager* noteManager,
         QWidget* parent = nullptr
     );
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
 
 private:
     NoteManager* m_noteManager;

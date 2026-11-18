@@ -1,8 +1,8 @@
 #pragma once
 
+#include <QList>
 #include <QObject>
 #include <QPointer>
-#include <QList>
 
 class StickyNote;
 
@@ -12,6 +12,8 @@ public:
     explicit NoteManager(QObject* parent = nullptr);
 
     void createNote();
+    void loadNotes();
+    void saveNotes();
 
 private:
     QList<QPointer<StickyNote>> m_notes;

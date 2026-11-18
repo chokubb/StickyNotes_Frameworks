@@ -4,6 +4,9 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
+#include <QApplication>
+#include <QCloseEvent>
+
 LauncherWindow::LauncherWindow(
     NoteManager* noteManager,
     QWidget* parent
@@ -45,4 +48,11 @@ LauncherWindow::LauncherWindow(
         m_noteManager,
         &NoteManager::createNote
     );
+}
+
+void LauncherWindow::closeEvent(QCloseEvent* event)
+{
+    event->accept();
+
+    QApplication::quit();
 }

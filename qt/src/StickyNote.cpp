@@ -111,3 +111,13 @@ void StickyNote::mouseReleaseEvent(QMouseEvent* event)
 
     QWidget::mouseReleaseEvent(event);
 }
+
+QString StickyNote::text() const
+{
+    return m_editor->toPlainText();
+}
+
+void StickyNote::setText(const QString& text)
+{
+    m_editor->setPlainText(text);
+}

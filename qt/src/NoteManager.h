@@ -1,8 +1,10 @@
 #pragma once
 
+#include <QColor>
 #include <QList>
 #include <QObject>
 #include <QPointer>
+#include <QPair>
 
 class StickyNote;
 
@@ -17,7 +19,15 @@ public:
 
 private:
     QList<QPointer<StickyNote>> m_notes;
+
     int m_noteCounter = 0;
+    int m_lastHue = -1;
 
     void removeDeletedNotes();
+
+    QPair<QColor, QColor> generatePalette();
+    double contrastRatio(
+        const QColor& first,
+        const QColor& second
+    ) const;
 };

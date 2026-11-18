@@ -17,12 +17,6 @@ StickyNote::StickyNote(QWidget* parent)
 
     setObjectName("stickyNote");
 
-    setStyleSheet(
-        "QWidget#stickyNote {"
-        "    background-color: #FFF2A8;"
-        "}"
-    );
-
     auto* closeButton = new QPushButton("×", this);
 
     closeButton->setGeometry(width() - 34, 6, 28, 28);
@@ -55,14 +49,7 @@ StickyNote::StickyNote(QWidget* parent)
     m_editor->setPlaceholderText("Write something...");
     m_editor->setFrameShape(QFrame::NoFrame);
 
-    m_editor->setStyleSheet(
-        "QPlainTextEdit {"
-        "    background: transparent;"
-        "    border: none;"
-        "    font-size: 18px;"
-        "    color: #2B2B2B;"
-        "}"
-    );
+    applyColors();
 
     layout->addWidget(m_editor);
 }
@@ -120,4 +107,50 @@ QString StickyNote::text() const
 void StickyNote::setText(const QString& text)
 {
     m_editor->setPlainText(text);
+}
+
+QColor StickyNote::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+QColor StickyNote::textColor() const
+{
+    return m_textColor;
+}
+
+void StickyNote::setColors(
+    const QColor& backgroundColor,
+    const QColor& textColor
+)
+{
+    m_backgroundColor = backgroundColor;
+    m_textColor = textColor;
+
+    applyColors();
+}
+
+void StickyNote::applyColors()
+{
+    setStyleSheet(
+        QString(
+            "QWidget#stickyNote {"
+            "    background-color: %1;"
+            "}"
+        ).arg(m_backgroundColor.name())
+    );
+
+    if (m_editor)
+    {
+        m_editor->setStyleSheet(
+            QString(
+                "QPlainTextEdit {"
+                "    background: transparent;"
+                "    border: none;"
+                "    font-size: 18px;"
+                "    color: %1;"
+                "}"
+            ).arg(m_textColor.name())
+        );
+    }
 }

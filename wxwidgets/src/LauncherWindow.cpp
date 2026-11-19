@@ -50,14 +50,14 @@ LauncherWindow::LauncherWindow(
 }
 
 void LauncherWindow::onNewNote(
-    wxCommandEvent& event
+    wxCommandEvent&
 )
 {
     m_noteManager->createNote();
 }
 
 void LauncherWindow::onClose(
-    wxCloseEvent& event
+    wxCloseEvent&
 )
 {
     m_noteManager->closeAllNotes();

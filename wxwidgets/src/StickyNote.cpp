@@ -97,10 +97,7 @@ StickyNote::StickyNote()
 
 void StickyNote::onLeftDown(wxMouseEvent& event)
 {
-    if (
-        event.LeftDown() &&
-        event.GetY() <= 34
-        )
+    if (event.GetY() <= 34)
     {
         m_dragging = true;
 
@@ -155,7 +152,7 @@ void StickyNote::onLeftUp(wxMouseEvent& event)
     event.Skip();
 }
 
-void StickyNote::onCloseClicked(wxMouseEvent& event)
+void StickyNote::onCloseClicked(wxMouseEvent&)
 {
     Close();
 }

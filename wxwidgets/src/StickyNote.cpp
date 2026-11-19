@@ -1,6 +1,8 @@
 #include "StickyNote.h"
 
+#include <wx/font.h>
 #include <wx/sizer.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/utils.h>
 
@@ -14,13 +16,14 @@ StickyNote::StickyNote()
         wxBORDER_NONE
     )
 {
-    SetBackgroundColour(
-        wxColour(255, 242, 168)
-    );
+    const wxColour backgroundColor(255, 242, 168);
+    const wxColour textColor(43, 43, 43);
+
+    SetBackgroundColour(backgroundColor);
 
     auto* layout = new wxBoxSizer(wxVERTICAL);
 
-    // Empty top strip used for dragging the frameless note.
+    // Empty top strip used for dragging.
     layout->AddSpacer(34);
 
     m_editor = new wxTextCtrl(
@@ -34,21 +37,10 @@ StickyNote::StickyNote()
         wxBORDER_NONE
     );
 
-    m_editor->SetBackgroundColour(
-        wxColour(255, 242, 168)
-    );
-
-    m_editor->SetForegroundColour(
-        wxColour(43, 43, 43)
-    );
-
-    m_editor->SetFont(
-        wxFontInfo(12)
-    );
-
-    m_editor->SetHint(
-        "Write something..."
-    );
+    m_editor->SetBackgroundColour(backgroundColor);
+    m_editor->SetForegroundColour(textColor);
+    m_editor->SetFont(wxFontInfo(12));
+    m_editor->SetHint("Write something...");
 
     layout->Add(
         m_editor,
@@ -61,7 +53,26 @@ StickyNote::StickyNote()
     );
 
     SetSizer(layout);
-    Layout();
+
+    m_closeLabel = new wxStaticText(
+        this,
+        wxID_ANY,
+        wxString(L"\u00D7"),
+        wxPoint(284, 3),
+        wxSize(30, 30),
+        wxALIGN_CENTER_HORIZONTAL
+    );
+
+    m_closeLabel->SetForegroundColour(textColor);
+    m_closeLabel->SetBackgroundColour(backgroundColor);
+    m_closeLabel->SetFont(wxFontInfo(16));
+    m_closeLabel->SetCursor(wxCursor(wxCURSOR_HAND));
+
+    m_closeLabel->Bind(
+        wxEVT_LEFT_UP,
+        &StickyNote::onCloseClicked,
+        this
+    );
 
     Bind(
         wxEVT_LEFT_DOWN,
@@ -81,7 +92,7 @@ StickyNote::StickyNote()
         this
     );
 
-    Centre();
+    Layout();
 }
 
 void StickyNote::onLeftDown(wxMouseEvent& event)
@@ -142,4 +153,9 @@ void StickyNote::onLeftUp(wxMouseEvent& event)
     }
 
     event.Skip();
+}
+
+void StickyNote::onCloseClicked(wxMouseEvent& event)
+{
+    Close();
 }

@@ -25,6 +25,12 @@ add_executable(
 
     src/StickyNote.cpp
     src/StickyNote.h
+
+    src/NoteManager.cpp
+    src/NoteManager.h
+
+    src/LauncherWindow.cpp
+    src/LauncherWindow.h
 )
 
 target_link_libraries(

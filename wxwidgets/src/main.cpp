@@ -1,18 +1,32 @@
+#include <memory>
+
 #include <wx/wx.h>
 
-#include "StickyNote.h"
+#include "LauncherWindow.h"
+#include "NoteManager.h"
 
 class StickyNotesApp : public wxApp
 {
 public:
     bool OnInit() override
     {
-        auto* note = new StickyNote();
+        m_noteManager =
+            std::make_unique<NoteManager>();
 
-        note->Show();
+        auto* launcher =
+            new LauncherWindow(
+                m_noteManager.get()
+            );
+
+        SetTopWindow(launcher);
+
+        launcher->Show();
 
         return true;
     }
+
+private:
+    std::unique_ptr<NoteManager> m_noteManager;
 };
 
 wxIMPLEMENT_APP(StickyNotesApp);

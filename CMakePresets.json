@@ -9,7 +9,7 @@
   "configurePresets": [
     {
       "name": "windows-vs2026-v143",
-      "displayName": "Windows - VS 2026 - v143 - Qt 6.12",
+      "displayName": "Windows - VS 2026 - v143",
       "generator": "Visual Studio 18 2026",
       "binaryDir": "${sourceDir}/build",
 
@@ -30,11 +30,21 @@
   "buildPresets": [
     {
       "name": "debug",
-      "displayName": "Debug",
+      "displayName": "Qt Debug",
       "configurePreset": "windows-vs2026-v143",
       "configuration": "Debug",
       "targets": [
         "StickyNotesQt"
+      ]
+    },
+
+    {
+      "name": "wx-debug",
+      "displayName": "wxWidgets Debug",
+      "configurePreset": "windows-vs2026-v143",
+      "configuration": "Debug",
+      "targets": [
+        "StickyNotesWx"
       ]
     }
   ]

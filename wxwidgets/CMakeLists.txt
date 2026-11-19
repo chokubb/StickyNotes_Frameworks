@@ -22,6 +22,9 @@ add_executable(
     WIN32
 
     src/main.cpp
+
+    src/StickyNote.cpp
+    src/StickyNote.h
 )
 
 target_link_libraries(

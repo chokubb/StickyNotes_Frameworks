@@ -60,6 +60,8 @@ void LauncherWindow::onClose(
     wxCloseEvent&
 )
 {
+    m_noteManager->saveNotes();
+
     m_noteManager->closeAllNotes();
 
     Destroy();

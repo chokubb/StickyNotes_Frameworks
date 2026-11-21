@@ -13,6 +13,8 @@ public:
         m_noteManager =
             std::make_unique<NoteManager>();
 
+        m_noteManager->loadNotes();
+
         auto* launcher =
             new LauncherWindow(
                 m_noteManager.get()

@@ -95,6 +95,16 @@ StickyNote::StickyNote()
     Layout();
 }
 
+wxString StickyNote::text() const
+{
+    return m_editor->GetValue();
+}
+
+void StickyNote::setText(const wxString& text)
+{
+    m_editor->SetValue(text);
+}
+
 void StickyNote::onLeftDown(wxMouseEvent& event)
 {
     if (event.GetY() <= 34)

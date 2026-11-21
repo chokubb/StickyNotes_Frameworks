@@ -2,6 +2,7 @@
 
 #include <wx/frame.h>
 #include <wx/gdicmn.h>
+#include <wx/string.h>
 
 class wxMouseEvent;
 class wxStaticText;
@@ -11,7 +12,9 @@ class StickyNote : public wxFrame
 {
 public:
     StickyNote();
-
+    
+    wxString text() const;
+    void setText(const wxString& text);
 private:
     void onLeftDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);

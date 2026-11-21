@@ -2,6 +2,8 @@
 #include "StickyNote.h"
 
 #include <algorithm>
+#include <cmath>
+#include <random>
 
 #include <wx/config.h>
 #include <wx/event.h>
@@ -15,23 +17,36 @@ void NoteManager::createNote()
     const int offset =
         (m_noteCounter % 6) * 24;
 
+    const auto palette =
+        generatePalette();
+
     createNoteAt(
         wxPoint(
             cursorPosition.x + 20 + offset,
             cursorPosition.y + 20 + offset
-        )
+        ),
+        "",
+        palette.first,
+        palette.second
     );
 }
 
 StickyNote* NoteManager::createNoteAt(
     const wxPoint& position,
-    const wxString& text
+    const wxString& text,
+    const wxColour& backgroundColor,
+    const wxColour& textColor
 )
 {
     auto* note = new StickyNote();
 
     note->Move(position);
     note->setText(text);
+
+    note->setColors(
+        backgroundColor,
+        textColor
+    );
 
     m_notes.push_back(note);
 
@@ -60,6 +75,13 @@ void NoteManager::saveNotes()
     );
 
     config.DeleteGroup("notes");
+
+    config.SetPath("/");
+
+    config.Write(
+        "lastHue",
+        static_cast<long>(m_lastHue)
+    );
 
     config.SetPath("/notes");
 
@@ -91,6 +113,12 @@ void NoteManager::saveNotes()
         const wxPoint position =
             note->GetPosition();
 
+        const wxColour background =
+            note->backgroundColor();
+
+        const wxColour text =
+            note->textColor();
+
         config.Write(
             "text",
             note->text()
@@ -105,6 +133,36 @@ void NoteManager::saveNotes()
             "y",
             static_cast<long>(position.y)
         );
+
+        config.Write(
+            "backgroundRed",
+            static_cast<long>(background.Red())
+        );
+
+        config.Write(
+            "backgroundGreen",
+            static_cast<long>(background.Green())
+        );
+
+        config.Write(
+            "backgroundBlue",
+            static_cast<long>(background.Blue())
+        );
+
+        config.Write(
+            "textRed",
+            static_cast<long>(text.Red())
+        );
+
+        config.Write(
+            "textGreen",
+            static_cast<long>(text.Green())
+        );
+
+        config.Write(
+            "textBlue",
+            static_cast<long>(text.Blue())
+        );
     }
 
     config.Flush();
@@ -116,6 +174,19 @@ void NoteManager::loadNotes()
         "StickyNotesWx",
         "StickyNotesFrameworkComparison"
     );
+
+    config.SetPath("/");
+
+    long lastHue = -1;
+
+    config.Read(
+        "lastHue",
+        &lastHue,
+        -1L
+    );
+
+    m_lastHue =
+        static_cast<int>(lastHue);
 
     config.SetPath("/notes");
 
@@ -141,6 +212,14 @@ void NoteManager::loadNotes()
         long x = 100;
         long y = 100;
 
+        long backgroundRed = 255;
+        long backgroundGreen = 242;
+        long backgroundBlue = 168;
+
+        long textRed = 43;
+        long textGreen = 43;
+        long textBlue = 43;
+
         config.Read(
             "text",
             &text,
@@ -159,17 +238,81 @@ void NoteManager::loadNotes()
             100L
         );
 
+        config.Read(
+            "backgroundRed",
+            &backgroundRed,
+            255L
+        );
+
+        config.Read(
+            "backgroundGreen",
+            &backgroundGreen,
+            242L
+        );
+
+        config.Read(
+            "backgroundBlue",
+            &backgroundBlue,
+            168L
+        );
+
+        config.Read(
+            "textRed",
+            &textRed,
+            43L
+        );
+
+        config.Read(
+            "textGreen",
+            &textGreen,
+            43L
+        );
+
+        config.Read(
+            "textBlue",
+            &textBlue,
+            43L
+        );
+
+        const auto channel =
+            [](long value)
+            {
+                return static_cast<unsigned char>(
+                    std::clamp(
+                        value,
+                        0L,
+                        255L
+                    )
+                    );
+            };
+
+        const wxColour backgroundColor(
+            channel(backgroundRed),
+            channel(backgroundGreen),
+            channel(backgroundBlue)
+        );
+
+        const wxColour textColor(
+            channel(textRed),
+            channel(textGreen),
+            channel(textBlue)
+        );
+
         createNoteAt(
             wxPoint(
                 static_cast<int>(x),
                 static_cast<int>(y)
             ),
-            text
+            text,
+            backgroundColor,
+            textColor
         );
     }
 }
 
-void NoteManager::removeNote(StickyNote* note)
+void NoteManager::removeNote(
+    StickyNote* note
+)
 {
     m_notes.erase(
         std::remove(
@@ -192,4 +335,265 @@ void NoteManager::closeAllNotes()
             note->Close(true);
         }
     }
+}
+
+std::pair<wxColour, wxColour>
+NoteManager::generatePalette()
+{
+    constexpr int minimumHueDifference = 40;
+
+    static std::mt19937 generator(
+        std::random_device{}()
+    );
+
+    std::uniform_int_distribution<int>
+        hueDistribution(0, 359);
+
+    std::uniform_int_distribution<int>
+        saturationDistribution(35, 55);
+
+    std::uniform_int_distribution<int>
+        lightnessDistribution(82, 90);
+
+    int hue = 0;
+
+    while (true)
+    {
+        hue =
+            hueDistribution(generator);
+
+        if (m_lastHue < 0)
+        {
+            break;
+        }
+
+        int difference =
+            std::abs(
+                hue - m_lastHue
+            );
+
+        difference =
+            std::min(
+                difference,
+                360 - difference
+            );
+
+        if (
+            difference >=
+            minimumHueDifference
+            )
+        {
+            break;
+        }
+    }
+
+    m_lastHue = hue;
+
+    const double saturation =
+        saturationDistribution(generator)
+        / 100.0;
+
+    const double lightness =
+        lightnessDistribution(generator)
+        / 100.0;
+
+    const wxColour background =
+        hslToColour(
+            hue,
+            saturation,
+            lightness
+        );
+
+    wxColour text =
+        hslToColour(
+            hue,
+            0.37,
+            0.22
+        );
+
+    if (
+        contrastRatio(
+            background,
+            text
+        ) < 4.5
+        )
+    {
+        text =
+            wxColour(
+                43,
+                43,
+                43
+            );
+    }
+
+    return {
+        background,
+        text
+    };
+}
+
+wxColour NoteManager::hslToColour(
+    int hue,
+    double saturation,
+    double lightness
+) const
+{
+    const double h =
+        hue / 360.0;
+
+    double red = lightness;
+    double green = lightness;
+    double blue = lightness;
+
+    if (saturation > 0.0)
+    {
+        const double q =
+            lightness < 0.5
+            ? lightness *
+            (1.0 + saturation)
+            : lightness +
+            saturation -
+            lightness * saturation;
+
+        const double p =
+            2.0 * lightness - q;
+
+        auto hueToRgb =
+            [](double pValue,
+                double qValue,
+                double t)
+            {
+                if (t < 0.0)
+                {
+                    t += 1.0;
+                }
+
+                if (t > 1.0)
+                {
+                    t -= 1.0;
+                }
+
+                if (t < 1.0 / 6.0)
+                {
+                    return pValue +
+                        (qValue - pValue) *
+                        6.0 * t;
+                }
+
+                if (t < 1.0 / 2.0)
+                {
+                    return qValue;
+                }
+
+                if (t < 2.0 / 3.0)
+                {
+                    return pValue +
+                        (qValue - pValue) *
+                        (2.0 / 3.0 - t) *
+                        6.0;
+                }
+
+                return pValue;
+            };
+
+        red =
+            hueToRgb(
+                p,
+                q,
+                h + 1.0 / 3.0
+            );
+
+        green =
+            hueToRgb(
+                p,
+                q,
+                h
+            );
+
+        blue =
+            hueToRgb(
+                p,
+                q,
+                h - 1.0 / 3.0
+            );
+    }
+
+    return wxColour(
+        static_cast<unsigned char>(
+            std::round(red * 255.0)
+            ),
+        static_cast<unsigned char>(
+            std::round(green * 255.0)
+            ),
+        static_cast<unsigned char>(
+            std::round(blue * 255.0)
+            )
+    );
+}
+
+double NoteManager::contrastRatio(
+    const wxColour& first,
+    const wxColour& second
+) const
+{
+    auto relativeLuminance =
+        [](const wxColour& colour)
+        {
+            auto linearize =
+                [](double value)
+                {
+                    value /= 255.0;
+
+                    if (
+                        value <=
+                        0.04045
+                        )
+                    {
+                        return
+                            value / 12.92;
+                    }
+
+                    return std::pow(
+                        (value + 0.055)
+                        / 1.055,
+                        2.4
+                    );
+                };
+
+            const double red =
+                linearize(colour.Red());
+
+            const double green =
+                linearize(colour.Green());
+
+            const double blue =
+                linearize(colour.Blue());
+
+            return
+                0.2126 * red +
+                0.7152 * green +
+                0.0722 * blue;
+        };
+
+    const double firstLuminance =
+        relativeLuminance(first);
+
+    const double secondLuminance =
+        relativeLuminance(second);
+
+    const double lighter =
+        std::max(
+            firstLuminance,
+            secondLuminance
+        );
+
+    const double darker =
+        std::min(
+            firstLuminance,
+            secondLuminance
+        );
+
+    return
+        (lighter + 0.05) /
+        (darker + 0.05);
 }

@@ -16,11 +16,6 @@ StickyNote::StickyNote()
         wxBORDER_NONE
     )
 {
-    const wxColour backgroundColor(255, 242, 168);
-    const wxColour textColor(43, 43, 43);
-
-    SetBackgroundColour(backgroundColor);
-
     auto* layout = new wxBoxSizer(wxVERTICAL);
 
     // Empty top strip used for dragging.
@@ -37,8 +32,6 @@ StickyNote::StickyNote()
         wxBORDER_NONE
     );
 
-    m_editor->SetBackgroundColour(backgroundColor);
-    m_editor->SetForegroundColour(textColor);
     m_editor->SetFont(wxFontInfo(12));
     m_editor->SetHint("Write something...");
 
@@ -63,10 +56,10 @@ StickyNote::StickyNote()
         wxALIGN_CENTER_HORIZONTAL
     );
 
-    m_closeLabel->SetForegroundColour(textColor);
-    m_closeLabel->SetBackgroundColour(backgroundColor);
     m_closeLabel->SetFont(wxFontInfo(16));
-    m_closeLabel->SetCursor(wxCursor(wxCURSOR_HAND));
+    m_closeLabel->SetCursor(
+        wxCursor(wxCURSOR_HAND)
+    );
 
     m_closeLabel->Bind(
         wxEVT_LEFT_UP,
@@ -92,6 +85,7 @@ StickyNote::StickyNote()
         this
     );
 
+    applyColors();
     Layout();
 }
 
@@ -103,6 +97,60 @@ wxString StickyNote::text() const
 void StickyNote::setText(const wxString& text)
 {
     m_editor->SetValue(text);
+}
+
+wxColour StickyNote::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+wxColour StickyNote::textColor() const
+{
+    return m_textColor;
+}
+
+void StickyNote::setColors(
+    const wxColour& backgroundColor,
+    const wxColour& textColor
+)
+{
+    m_backgroundColor = backgroundColor;
+    m_textColor = textColor;
+
+    applyColors();
+}
+
+void StickyNote::applyColors()
+{
+    SetBackgroundColour(m_backgroundColor);
+
+    if (m_editor != nullptr)
+    {
+        m_editor->SetBackgroundColour(
+            m_backgroundColor
+        );
+
+        m_editor->SetForegroundColour(
+            m_textColor
+        );
+
+        m_editor->Refresh();
+    }
+
+    if (m_closeLabel != nullptr)
+    {
+        m_closeLabel->SetBackgroundColour(
+            m_backgroundColor
+        );
+
+        m_closeLabel->SetForegroundColour(
+            m_textColor
+        );
+
+        m_closeLabel->Refresh();
+    }
+
+    Refresh();
 }
 
 void StickyNote::onLeftDown(wxMouseEvent& event)

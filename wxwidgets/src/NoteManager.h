@@ -14,6 +14,10 @@ class NoteManager
 public:
     void createNote();
 
+    StickyNote* createNoteAt(
+        const wxPoint& position
+    );
+
     void loadNotes();
     void saveNotes();
 

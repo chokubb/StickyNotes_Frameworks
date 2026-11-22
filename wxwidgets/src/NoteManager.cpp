@@ -17,14 +17,23 @@ void NoteManager::createNote()
     const int offset =
         (m_noteCounter % 6) * 24;
 
-    const auto palette =
-        generatePalette();
-
     createNoteAt(
         wxPoint(
             cursorPosition.x + 20 + offset,
             cursorPosition.y + 20 + offset
-        ),
+        )
+    );
+}
+
+StickyNote* NoteManager::createNoteAt(
+    const wxPoint& position
+)
+{
+    const auto palette =
+        generatePalette();
+
+    return createNoteAt(
+        position,
         wxSize(320, 320),
         "",
         palette.first,

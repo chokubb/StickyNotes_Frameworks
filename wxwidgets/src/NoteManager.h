@@ -27,6 +27,7 @@ private:
 
     StickyNote* createNoteAt(
         const wxPoint& position,
+        const wxSize& size,
         const wxString& text,
         const wxColour& backgroundColor,
         const wxColour& textColor

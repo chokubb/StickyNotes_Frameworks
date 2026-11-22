@@ -6,6 +6,7 @@
 #include <wx/string.h>
 
 class wxMouseEvent;
+class wxSizeEvent;
 class wxStaticText;
 class wxTextCtrl;
 
@@ -27,18 +28,31 @@ public:
 
 private:
     void applyColors();
+    void updateControlPositions();
 
     void onLeftDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onLeftUp(wxMouseEvent& event);
+
     void onCloseClicked(wxMouseEvent&);
+
+    void onSize(wxSizeEvent& event);
+
+    void onResizeLeftDown(wxMouseEvent& event);
+    void onResizeMouseMove(wxMouseEvent& event);
+    void onResizeLeftUp(wxMouseEvent& event);
 
     wxTextCtrl* m_editor;
     wxStaticText* m_closeLabel;
+    wxStaticText* m_resizeGrip;
 
     wxColour m_backgroundColor{ 255, 242, 168 };
     wxColour m_textColor{ 43, 43, 43 };
 
     wxPoint m_dragOffset;
     bool m_dragging = false;
+
+    wxPoint m_resizeStartMouse;
+    wxSize m_resizeStartSize;
+    bool m_resizing = false;
 };

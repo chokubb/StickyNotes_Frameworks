@@ -25,6 +25,7 @@ void NoteManager::createNote()
             cursorPosition.x + 20 + offset,
             cursorPosition.y + 20 + offset
         ),
+        wxSize(320, 320),
         "",
         palette.first,
         palette.second
@@ -33,6 +34,7 @@ void NoteManager::createNote()
 
 StickyNote* NoteManager::createNoteAt(
     const wxPoint& position,
+    const wxSize& size,
     const wxString& text,
     const wxColour& backgroundColor,
     const wxColour& textColor
@@ -40,6 +42,7 @@ StickyNote* NoteManager::createNoteAt(
 {
     auto* note = new StickyNote();
 
+    note->SetSize(size);
     note->Move(position);
     note->setText(text);
 
@@ -113,6 +116,9 @@ void NoteManager::saveNotes()
         const wxPoint position =
             note->GetPosition();
 
+        const wxSize size =
+            note->GetSize();
+
         const wxColour background =
             note->backgroundColor();
 
@@ -132,6 +138,16 @@ void NoteManager::saveNotes()
         config.Write(
             "y",
             static_cast<long>(position.y)
+        );
+
+        config.Write(
+            "width",
+            static_cast<long>(size.x)
+        );
+
+        config.Write(
+            "height",
+            static_cast<long>(size.y)
         );
 
         config.Write(
@@ -212,6 +228,9 @@ void NoteManager::loadNotes()
         long x = 100;
         long y = 100;
 
+        long width = 320;
+        long height = 320;
+
         long backgroundRed = 255;
         long backgroundGreen = 242;
         long backgroundBlue = 168;
@@ -236,6 +255,18 @@ void NoteManager::loadNotes()
             "y",
             &y,
             100L
+        );
+
+        config.Read(
+            "width",
+            &width,
+            320L
+        );
+
+        config.Read(
+            "height",
+            &height,
+            320L
         );
 
         config.Read(
@@ -302,6 +333,16 @@ void NoteManager::loadNotes()
             wxPoint(
                 static_cast<int>(x),
                 static_cast<int>(y)
+            ),
+            wxSize(
+                std::max(
+                    220,
+                    static_cast<int>(width)
+                ),
+                std::max(
+                    180,
+                    static_cast<int>(height)
+                )
             ),
             text,
             backgroundColor,

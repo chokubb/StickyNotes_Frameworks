@@ -21,7 +21,6 @@ LauncherWindow::LauncherWindow(
         wxSize(160, 130),
         wxBORDER_NONE |
         wxFRAME_NO_TASKBAR |
-        wxSTAY_ON_TOP |
         wxFRAME_SHAPED
     ),
     m_noteManager(noteManager)

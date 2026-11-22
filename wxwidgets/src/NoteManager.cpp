@@ -9,6 +9,8 @@
 #include <wx/event.h>
 #include <wx/utils.h>
 
+#include <wx/display.h>
+
 void NoteManager::createNote()
 {
     const wxPoint cursorPosition =
@@ -17,11 +19,95 @@ void NoteManager::createNote()
     const int offset =
         (m_noteCounter % 6) * 24;
 
+    constexpr int noteWidth = 320;
+    constexpr int noteHeight = 320;
+    constexpr int margin = 20;
+
+    int displayIndex =
+        wxDisplay::GetFromPoint(
+            cursorPosition
+        );
+
+    if (displayIndex == wxNOT_FOUND)
+    {
+        displayIndex = 0;
+    }
+
+    wxDisplay display(
+        static_cast<unsigned int>(
+            displayIndex
+            )
+    );
+
+    const wxRect area =
+        display.GetClientArea();
+
+    int x =
+        cursorPosition.x
+        + margin
+        + offset;
+
+    int y =
+        cursorPosition.y
+        + margin
+        + offset;
+
+    const int areaRight =
+        area.GetLeft()
+        + area.GetWidth();
+
+    const int areaBottom =
+        area.GetTop()
+        + area.GetHeight();
+
+    // If there isn't enough room to the right,
+    // place the note to the left of the cursor.
+    if (x + noteWidth > areaRight)
+    {
+        x =
+            cursorPosition.x
+            - noteWidth
+            - margin
+            - offset;
+    }
+
+    // If there isn't enough room below,
+    // place the note above the cursor.
+    if (y + noteHeight > areaBottom)
+    {
+        y =
+            cursorPosition.y
+            - noteHeight
+            - margin
+            - offset;
+    }
+
+    const int maxX =
+        std::max(
+            area.GetLeft(),
+            areaRight - noteWidth
+        );
+
+    const int maxY =
+        std::max(
+            area.GetTop(),
+            areaBottom - noteHeight
+        );
+
+    x = std::clamp(
+        x,
+        area.GetLeft(),
+        maxX
+    );
+
+    y = std::clamp(
+        y,
+        area.GetTop(),
+        maxY
+    );
+
     createNoteAt(
-        wxPoint(
-            cursorPosition.x + 20 + offset,
-            cursorPosition.y + 20 + offset
-        )
+        wxPoint(x, y)
     );
 }
 

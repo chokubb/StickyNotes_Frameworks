@@ -19,8 +19,6 @@ void NoteManager::createNote()
     const int offset =
         (m_noteCounter % 6) * 24;
 
-    constexpr int noteWidth = 320;
-    constexpr int noteHeight = 320;
     constexpr int margin = 20;
 
     int displayIndex =
@@ -62,22 +60,22 @@ void NoteManager::createNote()
 
     // If there isn't enough room to the right,
     // place the note to the left of the cursor.
-    if (x + noteWidth > areaRight)
+    if (x + StickyNote::DefaultWidth > areaRight)
     {
         x =
             cursorPosition.x
-            - noteWidth
+            - StickyNote::DefaultWidth
             - margin
             - offset;
     }
 
     // If there isn't enough room below,
     // place the note above the cursor.
-    if (y + noteHeight > areaBottom)
+    if (y + StickyNote::DefaultHeight > areaBottom)
     {
         y =
             cursorPosition.y
-            - noteHeight
+            - StickyNote::DefaultHeight
             - margin
             - offset;
     }
@@ -85,13 +83,13 @@ void NoteManager::createNote()
     const int maxX =
         std::max(
             area.GetLeft(),
-            areaRight - noteWidth
+            areaRight - StickyNote::DefaultWidth
         );
 
     const int maxY =
         std::max(
             area.GetTop(),
-            areaBottom - noteHeight
+            areaBottom - StickyNote::DefaultHeight
         );
 
     x = std::clamp(
@@ -120,7 +118,10 @@ StickyNote* NoteManager::createNoteAt(
 
     return createNoteAt(
         position,
-        wxSize(320, 320),
+        wxSize(
+            StickyNote::DefaultWidth,
+            StickyNote::DefaultHeight
+        ),
         "",
         palette.first,
         palette.second
@@ -323,8 +324,11 @@ void NoteManager::loadNotes()
         long x = 100;
         long y = 100;
 
-        long width = 320;
-        long height = 320;
+        long width =
+            StickyNote::DefaultWidth;
+
+        long height =
+            StickyNote::DefaultHeight;
 
         long backgroundRed = 255;
         long backgroundGreen = 242;
@@ -355,13 +359,17 @@ void NoteManager::loadNotes()
         config.Read(
             "width",
             &width,
-            320L
+            static_cast<long>(
+                StickyNote::DefaultWidth
+                )
         );
 
         config.Read(
             "height",
             &height,
-            320L
+            static_cast<long>(
+                StickyNote::DefaultHeight
+                )
         );
 
         config.Read(
@@ -431,11 +439,11 @@ void NoteManager::loadNotes()
             ),
             wxSize(
                 std::max(
-                    220,
+                    StickyNote::MinimumWidth,
                     static_cast<int>(width)
                 ),
                 std::max(
-                    180,
+                    StickyNote::MinimumHeight,
                     static_cast<int>(height)
                 )
             ),

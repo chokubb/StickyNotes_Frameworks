@@ -2,7 +2,13 @@
 
 [Українська](#українська) | [English](#english)
 
+### Qt
+
 ![Qt implementation](docs/screenshots/qt/12-paper-stack-launcher.png)
+
+### wxWidgets
+
+![wxWidgets implementation](docs/screenshots/wxwidgets/12-paper-stack-launcher.png)
 
 ---
 
@@ -12,17 +18,25 @@
 
 Цей репозиторій створено в межах курсової роботи на тему **«Порівняльний аналіз фреймворків для розробки кросплатформних додатків мовою C++»**.
 
-Метою роботи є практичне порівняння фреймворків **Qt** та **wxWidgets** шляхом реалізації одного й того самого настільного застосунку за допомогою обох технологій.
+Метою роботи є практичне порівняння **Qt** та **wxWidgets** шляхом реалізації одного й того самого настільного застосунку за допомогою обох фреймворків.
 
-Для порівняння розробляється застосунок віртуальних стікерів, орієнтований на швидку та інтуїтивну роботу з нотатками без необхідності відкривати окреме повноцінне вікно менеджера нотаток.
+Для порівняння розроблено застосунок віртуальних стікерів, орієнтований на швидку роботу з короткими нотатками без необхідності відкривати повноцінний менеджер нотаток.
 
 ## Ідея застосунку
 
-Основна концепція полягає у відтворенні взаємодії зі звичайними паперовими стікерами.
+Основна концепція відтворює взаємодію зі звичайними паперовими стікерами.
 
-Користувач може створити новий стікер через компактний лаунчер у вигляді стопки паперу, витягнути нову нотатку з цієї стопки, розмістити її в будь-якому місці екрана та одразу вводити текст.
+Користувач може:
 
-Створені нотатки працюють як окремі безрамкові вікна та можуть незалежно переміщуватися, змінювати розмір і видалятися.
+- створити новий стікер через компактний лаунчер у вигляді стопки паперу;
+- витягнути нову нотатку зі стопки перетягуванням;
+- розмістити її в будь-якому місці екрана;
+- одразу вводити та редагувати текст;
+- переміщувати нотатки;
+- змінювати їх розмір;
+- видаляти окремі стікери.
+
+Нотатки існують як незалежні безрамкові вікна.
 
 ## Фреймворки
 
@@ -31,111 +45,122 @@
 - **Qt 6.12**
 - **wxWidgets 3.2.12**
 
-Для забезпечення коректного практичного порівняння в обох реалізаціях передбачається однаковий базовий набір функціональних можливостей.
+Для коректного практичного порівняння в обох реалізаціях створено однаковий базовий набір функцій.
 
 ## Поточний стан
 
+Базова функціональність реалізована в **обох фреймворках**.
+
 | Функціональність | Qt | wxWidgets |
 | --- | :---: | :---: |
-| Створення стікерів | ✅ | ⏳ |
-| Редагування тексту | ✅ | ⏳ |
-| Переміщення стікерів | ✅ | ⏳ |
-| Робота з декількома нотатками | ✅ | ⏳ |
-| Видалення нотаток | ✅ | ⏳ |
-| Збереження тексту та позиції | ✅ | ⏳ |
-| Збереження розміру | ✅ | ⏳ |
-| Зміна розміру стікерів | ✅ | ⏳ |
-| Випадкові пастельні кольори | ✅ | ⏳ |
-| Автоматичний контрастний колір тексту | ✅ | ⏳ |
-| Збереження кольорів між запусками | ✅ | ⏳ |
-| Лаунчер у вигляді стопки стікерів | ✅ | ⏳ |
-| Створення нотатки перетягуванням зі стопки | ✅ | ⏳ |
-| Користувацька графіка та фінальне візуальне оформлення | Заплановано | Заплановано |
-| Анімація видалення / зминання паперу | Заплановано | Заплановано |
+| Створення стікерів | ✅ | ✅ |
+| Редагування тексту | ✅ | ✅ |
+| Переміщення стікерів | ✅ | ✅ |
+| Робота з декількома нотатками | ✅ | ✅ |
+| Видалення нотаток | ✅ | ✅ |
+| Збереження тексту та позиції | ✅ | ✅ |
+| Збереження розміру | ✅ | ✅ |
+| Зміна розміру стікерів | ✅ | ✅ |
+| Випадкові пастельні кольори | ✅ | ✅ |
+| Автоматичний контрастний колір тексту | ✅ | ✅ |
+| Збереження кольорів між запусками | ✅ | ✅ |
+| Лаунчер у вигляді стопки стікерів | ✅ | ✅ |
+| Створення натисканням | ✅ | ✅ |
+| Створення перетягуванням зі стопки | ✅ | ✅ |
+| Користувацька графіка | Заплановано | Заплановано |
+| Анімація зминання під час видалення | Заплановано | Заплановано |
 
-Базова функціональність реалізації на **Qt** завершена. Наступним етапом є реалізація аналогічних можливостей за допомогою **wxWidgets** і подальше практичне порівняння двох фреймворків.
+Таким чином, обидві реалізації досягли **функціонального паритету базового рівня**, необхідного для практичного порівняння фреймворків.
 
-## Реалізована функціональність Qt
+## Реалізована базова функціональність
 
-Поточна Qt-версія підтримує:
+Обидві версії підтримують:
 
-- безрамкові стікери у вигляді окремих вікон;
+- безрамкові стікери у вигляді незалежних вікон;
 - безпосереднє введення та редагування тексту;
 - переміщення нотаток по робочому столу;
 - одночасну роботу з декількома стікерами;
-- зміну розмірів;
-- видалення окремих нотаток;
-- збереження тексту, позиції, розміру та кольорів між запусками;
-- випадкову генерацію пастельної палітри;
-- автоматичне формування контрастного кольору тексту;
+- зміну розміру;
+- видалення;
+- збереження стану між запусками;
+- збереження тексту, позиції, розміру та кольорів;
+- випадкову генерацію пастельних кольорів;
+- автоматичний вибір читабельного кольору тексту;
 - компактний безрамковий лаунчер;
-- створення нового стікера звичайним натисканням або перетягуванням зі стопки.
-
-## Заплановані візуальні покращення
-
-Після досягнення функціонального паритету між Qt та wxWidgets планується подальше візуальне вдосконалення застосунку:
-
-- власна графіка для лаунчера;
-- відображення кольорів наступних стікерів безпосередньо у стопці;
-- черга з трьох видимих кольорів майбутніх нотаток;
-- візуальний ефект витягування стікера зі стопки;
-- користувацька анімація зминання паперу під час видалення;
-- додаткове стилістичне оформлення без зміни основної логіки застосунку.
+- створення нового стікера натисканням;
+- створення нового стікера перетягуванням зі стопки.
 
 ## Структура репозиторію
 
 ```text
 StickyNotes_Frameworks/
-├── qt/                 — реалізація за допомогою Qt
-├── wxwidgets/          — реалізація за допомогою wxWidgets
-├── docs/               — матеріали порівняння та нотатки щодо розробки
-├── CMakeLists.txt      — коренева конфігурація CMake
-├── CMakePresets.json   — конфігурація середовища збирання
+├── qt/
+│   ├── src/
+│   ├── CMakeLists.txt
+│   └── README.md
+│
+├── wxwidgets/
+│   ├── src/
+│   ├── CMakeLists.txt
+│   └── README.md
+│
+├── docs/
+│   ├── comparison.md
+│   ├── development-notes.md
+│   ├── screenshots/
+│   └── videos/
+│
+├── CMakeLists.txt
+├── CMakePresets.json
 └── README.md
 ```
 
 ## Основні критерії порівняння
 
-Під час розробки аналізуються:
+У процесі розробки аналізуються:
 
 - складність початкового налаштування;
+- інтеграція залежностей;
 - структура та обсяг коду;
 - створення та керування вікнами;
-- обробка подій миші та взаємодії з користувачем;
+- обробка подій миші;
 - робота з текстовими елементами;
-- можливості кастомізації інтерфейсу;
-- робота з власним малюванням елементів;
+- зміна розміру вікон;
+- кастомізація інтерфейсу;
+- власне малювання елементів;
+- робота з кольорами;
 - збереження стану застосунку;
-- підтримка анімацій;
+- можливості для майбутньої анімації;
 - кросплатформність;
 - процес збирання та розгортання.
 
+Детальні спостереження зібрані у [`docs/comparison.md`](docs/comparison.md).
+
 ## Середовище розробки
 
-Поточна конфігурація проєкту:
+Поточна конфігурація:
 
 - C++20;
 - Visual Studio 2026;
 - MSVC v143;
 - CMake;
 - Qt 6.12 MSVC 2022 64-bit;
+- wxWidgets 3.2.12;
 - Windows x64.
 
-Поточний `CMakePresets.json` передбачає встановлення Qt у:
+Qt встановлюється окремо та підключається через `find_package`.
 
-```text
-C:/Qt/6.12.0/msvc2022_64
-```
+wxWidgets завантажується і збирається з вихідного коду через CMake `FetchContent`.
 
-## Збирання Qt-версії
+## Збирання
 
-Конфігурація проєкту:
+### Конфігурація
 
 ```powershell
 cmake --preset windows-vs2026-v143
 ```
 
-Збирання:
+### Qt
 
 ```powershell
 cmake --build --preset debug
@@ -147,6 +172,31 @@ cmake --build --preset debug
 .\build\qt\Debug\StickyNotesQt.exe
 ```
 
+### wxWidgets
+
+```powershell
+cmake --build --preset wx-debug
+```
+
+Запуск:
+
+```powershell
+.\build\wxwidgets\Debug\StickyNotesWx.exe
+```
+
+## Заплановані покращення
+
+Після досягнення функціонального паритету подальша робота може бути зосереджена на візуальному оформленні:
+
+- власна графіка для стопки стікерів;
+- відображення кольору наступного стікера до його створення;
+- черга з трьох видимих кольорів майбутніх нотаток;
+- автоматичне зміщення кольорів у стопці після витягування верхнього стікера;
+- більш виразний візуальний ефект захоплення нотатки курсором;
+- користувацькі графічні ресурси;
+- анімація зминання паперу під час видалення;
+- фінальне візуальне полірування обох реалізацій.
+
 ---
 
 # English
@@ -155,17 +205,25 @@ cmake --build --preset debug
 
 This repository was created as part of a coursework project titled **“Comparative Analysis of Frameworks for Cross-Platform Application Development in C++.”**
 
-The goal is to provide a practical comparison of **Qt** and **wxWidgets** by implementing the same desktop application using both technologies.
+The goal is to provide a practical comparison of **Qt** and **wxWidgets** by implementing the same desktop application with both frameworks.
 
-The application used for the comparison is a virtual sticky-note system designed for quick and direct note-taking without requiring the user to work through a conventional full-size notes manager.
+The comparison application is a virtual sticky-note system designed for fast interaction with short notes without requiring a conventional full-size notes manager.
 
 ## Application Idea
 
-The main concept is to reproduce the interaction of physical sticky notes.
+The main concept reproduces the interaction of physical sticky notes.
 
-The user can create a new note through a compact paper-stack launcher, pull a note out of the stack, place it anywhere on the screen, and immediately enter text.
+The user can:
 
-Created notes operate as independent frameless windows and can be moved, resized, and deleted separately.
+- create a note through a compact paper-stack launcher;
+- pull a new note out of the stack by dragging;
+- place it anywhere on the screen;
+- immediately enter and edit text;
+- move notes independently;
+- resize them;
+- delete individual notes.
+
+Each sticky note operates as an independent frameless window.
 
 ## Frameworks
 
@@ -174,66 +232,73 @@ The coursework compares:
 - **Qt 6.12**
 - **wxWidgets 3.2.12**
 
-The same core feature set is intended to be implemented with both frameworks to provide a fair practical comparison.
+The same baseline functionality has been implemented in both frameworks to provide a fair practical comparison.
 
 ## Current Status
 
+The core functionality is implemented in **both versions**.
+
 | Feature | Qt | wxWidgets |
 | --- | :---: | :---: |
-| Sticky-note creation | ✅ | ⏳ |
-| Text editing | ✅ | ⏳ |
-| Window dragging | ✅ | ⏳ |
-| Multiple notes | ✅ | ⏳ |
-| Note deletion | ✅ | ⏳ |
-| Persistent text and position | ✅ | ⏳ |
-| Persistent dimensions | ✅ | ⏳ |
-| Note resizing | ✅ | ⏳ |
-| Random pastel colors | ✅ | ⏳ |
-| Automatic contrasting text color | ✅ | ⏳ |
-| Persistent colors | ✅ | ⏳ |
-| Paper-stack launcher | ✅ | ⏳ |
-| Drag-to-create interaction | ✅ | ⏳ |
-| Custom artwork and final visual design | Planned | Planned |
+| Sticky-note creation | ✅ | ✅ |
+| Text editing | ✅ | ✅ |
+| Window dragging | ✅ | ✅ |
+| Multiple notes | ✅ | ✅ |
+| Note deletion | ✅ | ✅ |
+| Persistent text and position | ✅ | ✅ |
+| Persistent dimensions | ✅ | ✅ |
+| Note resizing | ✅ | ✅ |
+| Random pastel colors | ✅ | ✅ |
+| Automatic contrasting text color | ✅ | ✅ |
+| Persistent colors | ✅ | ✅ |
+| Paper-stack launcher | ✅ | ✅ |
+| Click-to-create | ✅ | ✅ |
+| Drag-to-create | ✅ | ✅ |
+| Custom artwork | Planned | Planned |
 | Paper-crumpling deletion animation | Planned | Planned |
 
-The **core Qt implementation is complete**. The next stage is to reproduce the same functionality with **wxWidgets** and use the two implementations for the practical framework comparison.
+The two implementations have therefore reached **core functional parity**, providing a complete baseline for the framework comparison.
 
-## Implemented Qt Features
+## Implemented Baseline
 
-The current Qt implementation supports:
+Both versions support:
 
 - independent frameless sticky-note windows;
 - direct text entry and editing;
-- moving notes around the desktop;
-- multiple notes simultaneously;
-- note resizing;
-- individual note deletion;
-- persistence of text, position, dimensions, and colors;
+- note movement across the desktop;
+- multiple simultaneous notes;
+- resizing;
+- individual deletion;
+- persistent application state;
+- persistent text, position, dimensions, and colors;
 - random pastel palette generation;
-- automatic contrasting text colors;
+- automatically generated readable text colors;
 - a compact frameless launcher;
-- note creation through either clicking or dragging from the paper stack.
-
-## Planned Visual Improvements
-
-After functional parity is reached between Qt and wxWidgets, further visual development is planned:
-
-- custom launcher artwork;
-- displaying the colors of upcoming notes directly in the stack;
-- a visible three-color queue of future notes;
-- visual feedback while pulling a note from the stack;
-- a custom paper-crumpling deletion animation;
-- additional visual polish without changing the underlying note-management logic.
+- click-to-create interaction;
+- drag-to-create interaction.
 
 ## Repository Structure
 
 ```text
 StickyNotes_Frameworks/
-├── qt/                 — Qt implementation
-├── wxwidgets/          — wxWidgets implementation
-├── docs/               — comparison materials and development notes
-├── CMakeLists.txt      — root CMake configuration
-├── CMakePresets.json   — build environment configuration
+├── qt/
+│   ├── src/
+│   ├── CMakeLists.txt
+│   └── README.md
+│
+├── wxwidgets/
+│   ├── src/
+│   ├── CMakeLists.txt
+│   └── README.md
+│
+├── docs/
+│   ├── comparison.md
+│   ├── development-notes.md
+│   ├── screenshots/
+│   └── videos/
+│
+├── CMakeLists.txt
+├── CMakePresets.json
 └── README.md
 ```
 
@@ -242,43 +307,47 @@ StickyNotes_Frameworks/
 The development process is used to compare:
 
 - initial project setup;
+- dependency integration;
 - code structure and complexity;
 - window creation and management;
-- mouse-event and user-interaction handling;
+- mouse-event handling;
 - text controls;
+- resizing;
 - interface customization;
-- custom drawing capabilities;
+- custom drawing;
+- color handling;
 - application-state persistence;
-- animation support;
+- potential animation support;
 - cross-platform capabilities;
-- build and deployment processes.
+- build and deployment workflow.
+
+Detailed observations are recorded in [`docs/comparison.md`](docs/comparison.md).
 
 ## Development Environment
 
-The current project configuration uses:
+The project currently uses:
 
 - C++20;
 - Visual Studio 2026;
 - MSVC v143;
 - CMake;
 - Qt 6.12 MSVC 2022 64-bit;
+- wxWidgets 3.2.12;
 - Windows x64.
 
-The current `CMakePresets.json` expects Qt to be installed at:
+Qt is installed separately and located through `find_package`.
 
-```text
-C:/Qt/6.12.0/msvc2022_64
-```
+wxWidgets is downloaded and built from source using CMake `FetchContent`.
 
-## Building the Qt Version
+## Building
 
-Configure the project:
+### Configure
 
 ```powershell
 cmake --preset windows-vs2026-v143
 ```
 
-Build:
+### Qt
 
 ```powershell
 cmake --build --preset debug
@@ -289,3 +358,28 @@ Run:
 ```powershell
 .\build\qt\Debug\StickyNotesQt.exe
 ```
+
+### wxWidgets
+
+```powershell
+cmake --build --preset wx-debug
+```
+
+Run:
+
+```powershell
+.\build\wxwidgets\Debug\StickyNotesWx.exe
+```
+
+## Planned Improvements
+
+After reaching functional parity, further development can focus on visual refinement:
+
+- custom artwork for the paper-stack launcher;
+- previewing the next note color before creation;
+- a visible three-color queue of future notes;
+- shifting stack colors after the top note is removed;
+- stronger visual feedback while grabbing a note;
+- replaceable custom visual assets;
+- a paper-crumpling deletion animation;
+- final visual polish for both implementations.

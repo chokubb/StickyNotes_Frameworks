@@ -14,12 +14,18 @@ StickyNote::StickyNote()
         wxID_ANY,
         "",
         wxDefaultPosition,
-        wxSize(320, 320),
+        wxSize(
+            DefaultWidth,
+            DefaultHeight
+        ),
         wxBORDER_NONE
     )
 {
     SetMinSize(
-        wxSize(220, 180)
+        wxSize(
+            MinimumWidth,
+            MinimumHeight
+        )
     );
 
     auto* layout =

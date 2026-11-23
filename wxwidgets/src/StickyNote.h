@@ -13,6 +13,12 @@ class wxTextCtrl;
 class StickyNote : public wxFrame
 {
 public:
+    static constexpr int DefaultWidth = 320;
+    static constexpr int DefaultHeight = 320;
+
+    static constexpr int MinimumWidth = 220;
+    static constexpr int MinimumHeight = 180;
+
     StickyNote();
 
     wxString text() const;

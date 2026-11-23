@@ -1,28 +1,41 @@
-# Qt Implementation
+Qt Implementation
 
 Qt implementation of the cross-platform sticky-notes application used in the framework comparison.
 
-## Status
+Status
 
-**Core functionality complete.**
+Core functionality complete.
 
-The implementation currently supports:
+The Qt implementation has reached the common functional baseline used for comparison with wxWidgets.
 
-- frameless independent sticky-note windows;
-- direct text editing;
-- dragging notes around the desktop;
-- multiple simultaneous notes;
-- individual deletion;
-- resizing;
-- persistence of text, position, dimensions, and colors between sessions;
-- random pastel color generation;
-- automatically generated contrasting text colors;
-- a compact paper-stack launcher;
-- creation of notes by clicking or dragging from the launcher.
+Implemented Features
 
-## Structure
+frameless independent sticky-note windows;
 
-```text
+direct text editing;
+
+note dragging;
+
+multiple simultaneous notes;
+
+individual deletion;
+
+resizing;
+
+persistence of text, position, dimensions, and colors;
+
+random pastel palette generation;
+
+automatic contrasting text colors;
+
+paper-stack launcher;
+
+click-to-create interaction;
+
+drag-to-create interaction.
+
+Structure
+
 src/
 ├── main.cpp
 ├── StickyNote.h
@@ -31,50 +44,89 @@ src/
 ├── NoteManager.cpp
 ├── LauncherWindow.h
 └── LauncherWindow.cpp
-```
 
-### `StickyNote`
+StickyNote
 
-Represents an individual sticky note and is responsible for:
+Represents an individual note and handles:
 
-- displaying and editing text;
-- custom frameless-window appearance;
-- note movement;
-- resizing;
-- applying note colors;
-- deletion controls.
+editable content;
 
-### `NoteManager`
+frameless-window appearance;
 
-Manages note creation and application state, including:
+window dragging;
 
-- tracking active notes;
-- generating random pastel palettes;
-- calculating readable text colors;
-- saving note data;
-- restoring notes between application sessions.
+resizing through QSizeGrip;
 
-Persistent state is implemented using `QSettings`.
+note colors;
 
-### `LauncherWindow`
+deletion controls.
 
-Provides the compact paper-stack interface used to create new notes.
+NoteManager
 
-The launcher supports both:
+Handles:
 
-- click-to-create;
-- drag-to-create interaction.
+creation and tracking of notes;
 
-Its current appearance is rendered programmatically using `QPainter` and is intended to be replaceable by custom visual assets later.
+random pastel palette generation;
 
-## Planned Improvements
+contrast checking;
 
-The core Qt feature set is considered complete for the initial framework comparison.
+persistence;
 
-Future visual improvements may include:
+restoration of saved notes.
 
-- custom paper-stack artwork;
-- a visible queue showing the colors of upcoming notes;
-- improved visual feedback during drag-to-create;
-- custom paper textures;
-- a paper-crumpling deletion animation.
+Persistent state is implemented with QSettings.
+
+Qt's QColor API is used for HSL color generation and conversion.
+
+LauncherWindow
+
+Provides the custom paper-stack interface.
+
+Its current appearance is drawn programmatically with QPainter.
+
+The launcher supports:
+
+click-to-create;
+
+drag-to-create.
+
+Current Assessment
+
+Qt provided relatively direct high-level APIs for most of the application requirements.
+
+Particularly useful components include:
+
+QWidget;
+
+QPlainTextEdit;
+
+QSizeGrip;
+
+QSettings;
+
+QColor;
+
+QPainter;
+
+Qt style sheets;
+
+virtual mouse-event handlers.
+
+Further visual development is intentionally deferred until the common baseline has been fully reviewed.
+
+Planned Improvements
+
+custom paper-stack artwork;
+
+visible preview of upcoming note colors;
+
+three-color stack queue;
+
+improved drag feedback;
+
+custom visual assets;
+
+paper-crumpling deletion animation;
+
+final visual polish.
